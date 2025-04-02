@@ -7,16 +7,15 @@ from sklearn.linear_model import LinearRegression
 
 # Streamlit UI
 st.set_page_config(page_title="💰 Rich or Bankrupt? AI Lifestyle Analyzer", layout="wide")
-st.title("💰 Rich or Bankrupt? AI Lifestyle Analyzer")
-st.subheader("Predict Your Net Worth in 5 Years! 🚀")
 
-# Sidebar Profile Icon to Open Account Details
+# Sidebar Profile Section
 if "show_account" not in st.session_state:
     st.session_state.show_account = False
 
 def toggle_account_details():
     st.session_state.show_account = not st.session_state.show_account
 
+st.sidebar.image("https://via.placeholder.com/100", width=100)
 st.sidebar.button("👤 Profile", on_click=toggle_account_details)
 
 if st.session_state.show_account:
@@ -26,46 +25,69 @@ if st.session_state.show_account:
         username = st.text_input("Username")
         password = st.text_input("Password", type="password")
 
-# User Inputs
+# Theme Toggle
+if "dark_mode" not in st.session_state:
+    st.session_state.dark_mode = False
+
+def toggle_theme():
+    st.session_state.dark_mode = not st.session_state.dark_mode
+
+st.sidebar.button("🌙 Toggle Theme", on_click=toggle_theme)
+
+# Financial Inputs
 st.sidebar.header("Financial Details")
-st.sidebar.subheader("Income & Savings")
-income = st.sidebar.number_input("Monthly Income (₹)", min_value=0, step=1000)
-savings = st.sidebar.number_input("Monthly Savings (₹)", min_value=0, step=500)
-crypto = st.sidebar.number_input("Crypto/Investments (₹)", min_value=0, step=500)
+with st.sidebar.expander("💰 Income & Savings"):
+    income = st.number_input("Monthly Income (₹)", min_value=0, step=1000)
+    savings = st.number_input("Monthly Savings (₹)", min_value=0, step=500)
+    savings_goal = st.number_input("Savings Goal (₹)", min_value=0, step=10000)
+    crypto = st.number_input("Crypto/Investments (₹)", min_value=0, step=500)
 
-st.sidebar.subheader("Fixed Expenses")
-rent = st.sidebar.number_input("Rent (₹)", min_value=0, step=500)
-emi = st.sidebar.number_input("EMI (₹)", min_value=0, step=500)
-emergency_fund = st.sidebar.number_input("Emergency Fund Contribution (₹)", min_value=0, step=500)
+with st.sidebar.expander("🏠 Fixed Expenses"):
+    rent = st.number_input("Rent (₹)", min_value=0, step=500)
+    emi = st.number_input("EMI (₹)", min_value=0, step=500)
+    emergency_fund = st.number_input("Emergency Fund Contribution (₹)", min_value=0, step=500)
 
-st.sidebar.subheader("Flexible Expenses")
-food = st.sidebar.number_input("Food & Groceries (₹)", min_value=0, step=500)
-fun = st.sidebar.number_input("Entertainment (₹)", min_value=0, step=500)
-extra_expenses = st.sidebar.number_input("Extra Expenses (₹)", min_value=0, step=500)
+with st.sidebar.expander("🍔 Flexible Expenses"):
+    food = st.number_input("Food & Groceries (₹)", min_value=0, step=500)
+    fun = st.number_input("Entertainment (₹)", min_value=0, step=500)
+    extra_expenses = st.number_input("Extra Expenses (₹)", min_value=0, step=500)
+    custom_expense = st.text_input("Custom Expense Name")
+    custom_expense_value = st.number_input("Custom Expense (₹)", min_value=0, step=500)
 
 # Extras Section
-st.sidebar.subheader("Extras")
+st.sidebar.subheader("📂 Extras")
 st.sidebar.text_area("Additional Notes")
 st.sidebar.file_uploader("Upload Financial Data (CSV)")
 
-# Calculate Monthly & Yearly Net Savings
-expenses = rent + emi + food + fun + extra_expenses + emergency_fund
+# Calculate Net Savings
+expenses = rent + emi + food + fun + extra_expenses + emergency_fund + custom_expense_value
 net_savings = income - expenses
-net_worth_now = savings * 12  # Current Yearly Savings
+net_worth_now = savings * 12
+
+# Predict Future Net Worth
+def predict_net_worth(years=5):
+    years_array = np.array(range(1, years + 1)).reshape(-1, 1)
+    savings_array = np.array([net_worth_now * (1 + 0.08) ** i for i in range(1, years + 1)]).reshape(-1, 1)
+    model = LinearRegression()
+    model.fit(years_array, savings_array)
+    future_net_worth = model.predict(np.array([[years]])).flatten()[0]
+    return future_net_worth
+
+predicted_worth = predict_net_worth()
 
 # Display Results
 st.subheader("📊 Financial Summary")
-col1, col2 = st.columns(2)
+col1, col2, col3 = st.columns(3)
 col1.metric("Monthly Net Savings", f"₹{net_savings}")
-col2.metric("Predicted Net Worth in 5 Years", f"₹{net_worth_now * (1 + 0.08) ** 5:,.2f}")
+col2.metric("Predicted Net Worth in 5 Years", f"₹{predicted_worth:,.2f}")
+progress = min((net_worth_now / savings_goal) * 100, 100) if savings_goal > 0 else 0
+col3.progress(progress / 100)
 
 # Expense Breakdown Pie Chart
 st.subheader("📌 Where Your Money Goes")
 fig, ax = plt.subplots()
-labels = ["Rent", "EMI", "Food", "Entertainment", "Extra Expenses", "Emergency Fund"]
-data = [rent, emi, food, fun, extra_expenses, emergency_fund]
-
-# Remove zero values safely
+labels = ["Rent", "EMI", "Food", "Entertainment", "Extra Expenses", "Emergency Fund", custom_expense]
+data = [rent, emi, food, fun, extra_expenses, emergency_fund, custom_expense_value]
 filtered_data = [(label, value) for label, value in zip(labels, data) if value > 0]
 if filtered_data:
     filtered_labels, filtered_values = zip(*filtered_data)
@@ -78,9 +100,9 @@ else:
 
 # Money Persona Badge
 st.subheader("🏆 Your Money Persona")
-if net_worth_now * (1 + 0.08) ** 5 > 5000000:
+if predicted_worth > 5000000:
     st.success("🔥 Smart Investor! You're on track to be wealthy!")
-elif net_worth_now * (1 + 0.08) ** 5 > 1000000:
+elif predicted_worth > 1000000:
     st.info("💡 Balanced Saver! Keep up the good work!")
 else:
     st.warning("⚠️ YOLO Spender! Consider saving more!")
@@ -102,5 +124,16 @@ if emergency_fund < (0.1 * income):
 for tip in advice:
     with st.expander(f"✔️ {tip}"):
         st.write("Suggested Action: Take steps to optimize your spending and savings!")
+
+# Download Financial Report
+st.subheader("📜 Download Your Financial Report")
+if st.button("📥 Download Report"):
+    report_content = f"""
+    Financial Summary Report
+    ==========================
+    Monthly Net Savings: ₹{net_savings}
+    Predicted Net Worth in 5 Years: ₹{predicted_worth:,.2f}
+    """
+    st.download_button(label="Download Report as TXT", data=report_content, file_name="financial_report.txt")
 
 st.caption("💬 Compare with friends & improve your financial future! 🚀")
