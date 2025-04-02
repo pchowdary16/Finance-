@@ -26,17 +26,6 @@ if st.session_state.show_account:
         username = st.text_input("Username")
         password = st.text_input("Password", type="password")
 
-# Theme Toggle
-if "theme" not in st.session_state:
-    st.session_state.theme = "light"
-
-def toggle_theme():
-    st.session_state.theme = "dark" if st.session_state.theme == "light" else "light"
-
-if st.sidebar.button("🌙 Toggle Theme"):
-    toggle_theme()
-    st.rerun()
-
 # Financial Inputs
 st.sidebar.header("Financial Details")
 with st.sidebar.expander("💰 Income & Savings"):
