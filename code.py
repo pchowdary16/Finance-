@@ -90,7 +90,7 @@ for tip in advice:
 st.subheader("📈 Real-Time Stock Market News")
 def get_stock_news():
     api_key = "YOUR_NEWSAPI_KEY"  # Replace with your valid NewsAPI key
-    url = f"https://newsapi.org/v2/everything?q=stocks OR market OR finance&sortBy=publishedAt&apiKey={api_key}"
+    url = f"https://newsapi.org/v2/top-headlines?category=business&country=us&apiKey={api_key}"
     try:
         response = requests.get(url)
         if response.status_code == 200:
@@ -99,14 +99,14 @@ def get_stock_news():
             if articles:
                 for article in articles:
                     st.markdown(f"**{article['title']}**")
-                    st.write(article['description'])
+                    st.write(article.get('description', 'No description available.'))
                     st.write(f"[Read more]({article['url']})")
             else:
                 st.write("No recent stock market news found.")
         else:
-            st.error("Failed to fetch news. Check API key and rate limits.")
+            st.error(f"Failed to fetch news. Error {response.status_code}: {response.text}")
     except Exception as e:
-        st.error("Error fetching stock market news.")
+        st.error(f"Error fetching stock market news: {str(e)}")
 
 get_stock_news()
 
