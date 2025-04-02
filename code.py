@@ -7,6 +7,7 @@ from sklearn.linear_model import LinearRegression
 
 # Streamlit UI
 st.set_page_config(page_title="💰 Rich or Bankrupt? AI Lifestyle Analyzer", layout="wide")
+st.title("💰 Rich or Bankrupt? AI Lifestyle Analyzer")
 
 # Sidebar Profile Section
 if "show_account" not in st.session_state:
@@ -32,7 +33,8 @@ if "dark_mode" not in st.session_state:
 def toggle_theme():
     st.session_state.dark_mode = not st.session_state.dark_mode
 
-st.sidebar.button("🌙 Toggle Theme", on_click=toggle_theme)
+if st.sidebar.button("🌙 Toggle Theme"):
+    toggle_theme()
 
 # Financial Inputs
 st.sidebar.header("Financial Details")
