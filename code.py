@@ -4,7 +4,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.linear_model import LinearRegression
-import requests
 
 # Streamlit UI
 st.title("💰 Rich or Bankrupt? AI Lifestyle Analyzer")
@@ -85,28 +84,5 @@ if emergency_fund < (0.1 * income):
 
 for tip in advice:
     st.write("✔️", tip)
-
-# Real-time Stock Market News from Finnhub
-st.subheader("📈 Real-Time Stock Market News")
-def get_stock_news():
-    api_key = "your_actual_finnhub_api_key_here"  # Replace with your valid Finnhub API key
-    url = f"https://finnhub.io/api/v1/news?category=general&token={api_key}"
-    try:
-        response = requests.get(url)
-        if response.status_code == 200:
-            news_data = response.json()
-            if news_data:
-                for article in news_data[:5]:
-                    st.markdown(f"**{article['headline']}**")
-                    st.write(article.get('summary', 'No description available.'))
-                    st.write(f"[Read more]({article['url']})")
-            else:
-                st.write("No recent stock market news found.")
-        else:
-            st.error(f"Failed to fetch news. Error {response.status_code}: {response.text}")
-    except Exception as e:
-        st.error(f"Error fetching stock market news: {str(e)}")
-
-get_stock_news()
 
 st.caption("💬 Compare with friends & improve your financial future! 🚀")
