@@ -12,14 +12,17 @@ st.subheader("Predict Your Net Worth in 5 Years! 🚀")
 # User Inputs
 st.sidebar.header("Enter Your Financial Details")
 income = st.sidebar.number_input("Monthly Income (₹)", min_value=0, step=1000)
-rent = st.sidebar.number_input("Rent/EMI (₹)", min_value=0, step=500)
+rent = st.sidebar.number_input("Rent (₹)", min_value=0, step=500)
+emi = st.sidebar.number_input("EMI (₹)", min_value=0, step=500)
 food = st.sidebar.number_input("Food & Groceries (₹)", min_value=0, step=500)
 fun = st.sidebar.number_input("Entertainment (₹)", min_value=0, step=500)
 crypto = st.sidebar.number_input("Crypto/Investments (₹)", min_value=0, step=500)
 savings = st.sidebar.number_input("Monthly Savings (₹)", min_value=0, step=500)
+extra_expenses = st.sidebar.number_input("Extra Expenses (₹)", min_value=0, step=500)
+emergency_fund = st.sidebar.number_input("Emergency Fund Contribution (₹)", min_value=0, step=500)
 
 # Calculate Monthly & Yearly Net Savings
-expenses = rent + food + fun
+expenses = rent + emi + food + fun + extra_expenses + emergency_fund
 net_savings = income - expenses
 net_worth_now = savings * 12  # Current Yearly Savings
 
@@ -43,9 +46,9 @@ col2.metric("Predicted Net Worth in 5 Years", f"₹{predicted_worth:,.2f}")
 # Expense Breakdown Pie Chart
 st.subheader("📌 Where Your Money Goes")
 fig, ax = plt.subplots()
-labels = ["Rent", "Food", "Entertainment"]
-data = [rent, food, fun]
-ax.pie(data, labels=labels, autopct="%1.1f%%", startangle=140, colors=['#ff9999','#66b3ff','#99ff99'])
+labels = ["Rent", "EMI", "Food", "Entertainment", "Extra Expenses", "Emergency Fund"]
+data = [rent, emi, food, fun, extra_expenses, emergency_fund]
+ax.pie(data, labels=labels, autopct="%1.1f%%", startangle=140, colors=['#ff9999','#66b3ff','#99ff99','#ffcc99','#c2c2f0','#ffb3e6'])
 st.pyplot(fig)
 
 # Money Persona Badge
@@ -66,6 +69,10 @@ if savings < (0.2 * income):
     advice.append("Try saving at least 20% of your income for financial security.")
 if crypto > (0.5 * savings):
     advice.append("High crypto investment! Diversify your portfolio.")
+if emi > (0.4 * income):
+    advice.append("Your EMI is too high! Consider refinancing or paying off loans earlier.")
+if emergency_fund < (0.1 * income):
+    advice.append("Increase your emergency fund contributions for financial safety.")
 
 for tip in advice:
     st.write("✔️", tip)
