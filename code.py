@@ -6,8 +6,16 @@ import seaborn as sns
 from sklearn.linear_model import LinearRegression
 
 # Streamlit UI
+st.set_page_config(page_title="💰 Rich or Bankrupt? AI Lifestyle Analyzer", layout="wide")
 st.title("💰 Rich or Bankrupt? AI Lifestyle Analyzer")
 st.subheader("Predict Your Net Worth in 5 Years! 🚀")
+
+# Account Details
+st.sidebar.header("Account Details")
+name = st.sidebar.text_input("Name")
+email = st.sidebar.text_input("Email")
+username = st.sidebar.text_input("Username")
+password = st.sidebar.text_input("Password", type="password")
 
 # User Inputs
 st.sidebar.header("Enter Your Financial Details")
