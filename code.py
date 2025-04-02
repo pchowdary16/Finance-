@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.linear_model import LinearRegression
 
-# Streamlit UI
+# Set Streamlit Page Config
 st.set_page_config(page_title="💰 Rich or Bankrupt? AI Lifestyle Analyzer", layout="wide")
 st.title("💰 Rich or Bankrupt? AI Lifestyle Analyzer")
 
@@ -27,14 +27,15 @@ if st.session_state.show_account:
         password = st.text_input("Password", type="password")
 
 # Theme Toggle
-if "dark_mode" not in st.session_state:
-    st.session_state.dark_mode = False
+if "theme" not in st.session_state:
+    st.session_state.theme = "light"
 
 def toggle_theme():
-    st.session_state.dark_mode = not st.session_state.dark_mode
+    st.session_state.theme = "dark" if st.session_state.theme == "light" else "light"
 
 if st.sidebar.button("🌙 Toggle Theme"):
     toggle_theme()
+    st.rerun()
 
 # Financial Inputs
 st.sidebar.header("Financial Details")
