@@ -53,22 +53,11 @@ expenses = rent + emi + food + fun + extra_expenses + emergency_fund
 net_savings = income - expenses
 net_worth_now = savings * 12  # Current Yearly Savings
 
-def predict_net_worth(years=5):
-    # Dummy ML Model (Linear Regression for Simplicity)
-    years_array = np.array(range(1, years + 1)).reshape(-1, 1)
-    savings_array = np.array([net_worth_now * (1 + 0.08) ** i for i in range(1, years + 1)]).reshape(-1, 1)
-    model = LinearRegression()
-    model.fit(years_array, savings_array)
-    future_net_worth = model.predict(np.array([[years]])).flatten()[0]
-    return future_net_worth
-
-predicted_worth = predict_net_worth()
-
 # Display Results
 st.subheader("📊 Financial Summary")
 col1, col2 = st.columns(2)
 col1.metric("Monthly Net Savings", f"₹{net_savings}")
-col2.metric("Predicted Net Worth in 5 Years", f"₹{predicted_worth:,.2f}")
+col2.metric("Predicted Net Worth in 5 Years", f"₹{net_worth_now * (1 + 0.08) ** 5:,.2f}")
 
 # Expense Breakdown Pie Chart
 st.subheader("📌 Where Your Money Goes")
@@ -87,22 +76,11 @@ if filtered_data:
 else:
     st.write("No expenses to display.")
 
-# Net Worth Prediction Chart
-st.subheader("📈 Future Net Worth Projection")
-years_range = np.arange(1, 6)
-predicted_values = [predict_net_worth(year) for year in years_range]
-fig, ax = plt.subplots()
-ax.plot(years_range, predicted_values, marker='o', linestyle='-', color='b')
-ax.set_xlabel("Years")
-ax.set_ylabel("Predicted Net Worth (₹)")
-ax.set_title("Projected Net Worth Over Time")
-st.pyplot(fig)
-
 # Money Persona Badge
 st.subheader("🏆 Your Money Persona")
-if predicted_worth > 5000000:
+if net_worth_now * (1 + 0.08) ** 5 > 5000000:
     st.success("🔥 Smart Investor! You're on track to be wealthy!")
-elif predicted_worth > 1000000:
+elif net_worth_now * (1 + 0.08) ** 5 > 1000000:
     st.info("💡 Balanced Saver! Keep up the good work!")
 else:
     st.warning("⚠️ YOLO Spender! Consider saving more!")
