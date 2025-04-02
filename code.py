@@ -89,17 +89,17 @@ for tip in advice:
 # Real-time Stock Market News
 st.subheader("📈 Real-Time Stock Market News")
 def get_stock_news():
-    api_key = "YOUR_NEWSAPI_KEY"  # Replace with your valid NewsAPI key
-    url = f"https://newsapi.org/v2/top-headlines?category=business&country=us&apiKey={api_key}"
+    api_key = "YOUR_ALPHA_VANTAGE_API_KEY"  # Replace with your valid Alpha Vantage API key
+    url = f"https://www.alphavantage.co/query?function=NEWS_SENTIMENT&apikey={api_key}"
     try:
         response = requests.get(url)
         if response.status_code == 200:
             news_data = response.json()
-            articles = news_data.get("articles", [])[:5]
-            if articles:
-                for article in articles:
+            feed = news_data.get("feed", [])[:5]
+            if feed:
+                for article in feed:
                     st.markdown(f"**{article['title']}**")
-                    st.write(article.get('description', 'No description available.'))
+                    st.write(article.get('summary', 'No description available.'))
                     st.write(f"[Read more]({article['url']})")
             else:
                 st.write("No recent stock market news found.")
