@@ -86,19 +86,18 @@ if emergency_fund < (0.1 * income):
 for tip in advice:
     st.write("✔️", tip)
 
-# Real-time Stock Market News
+# Real-time Stock Market News from Finnhub
 st.subheader("📈 Real-Time Stock Market News")
 def get_stock_news():
-    api_key = "YOUR_ALPHA_VANTAGE_API_KEY"  # Replace with your valid Alpha Vantage API key
-    url = f"https://www.alphavantage.co/query?function=NEWS_SENTIMENT&apikey={api_key}"
+    api_key = "YOUR_FINNHUB_API_KEY"  # Replace with your valid Finnhub API key
+    url = f"https://finnhub.io/api/v1/news?category=general&token={api_key}"
     try:
         response = requests.get(url)
         if response.status_code == 200:
             news_data = response.json()
-            feed = news_data.get("feed", [])[:5]
-            if feed:
-                for article in feed:
-                    st.markdown(f"**{article['title']}**")
+            if news_data:
+                for article in news_data[:5]:
+                    st.markdown(f"**{article['headline']}**")
                     st.write(article.get('summary', 'No description available.'))
                     st.write(f"[Read more]({article['url']})")
             else:
