@@ -20,23 +20,32 @@ def toggle_account_details():
 st.sidebar.button("👤 Profile", on_click=toggle_account_details)
 
 if st.session_state.show_account:
-    st.sidebar.header("Account Details")
-    name = st.sidebar.text_input("Name")
-    email = st.sidebar.text_input("Email")
-    username = st.sidebar.text_input("Username")
-    password = st.sidebar.text_input("Password", type="password")
+    with st.sidebar.expander("Account Details", expanded=True):
+        name = st.text_input("Name")
+        email = st.text_input("Email")
+        username = st.text_input("Username")
+        password = st.text_input("Password", type="password")
 
 # User Inputs
-st.sidebar.header("Enter Your Financial Details")
+st.sidebar.header("Financial Details")
+st.sidebar.subheader("Income & Savings")
 income = st.sidebar.number_input("Monthly Income (₹)", min_value=0, step=1000)
+savings = st.sidebar.number_input("Monthly Savings (₹)", min_value=0, step=500)
+crypto = st.sidebar.number_input("Crypto/Investments (₹)", min_value=0, step=500)
+
+st.sidebar.subheader("Fixed Expenses")
 rent = st.sidebar.number_input("Rent (₹)", min_value=0, step=500)
 emi = st.sidebar.number_input("EMI (₹)", min_value=0, step=500)
+emergency_fund = st.sidebar.number_input("Emergency Fund Contribution (₹)", min_value=0, step=500)
+
+st.sidebar.subheader("Flexible Expenses")
 food = st.sidebar.number_input("Food & Groceries (₹)", min_value=0, step=500)
 fun = st.sidebar.number_input("Entertainment (₹)", min_value=0, step=500)
-crypto = st.sidebar.number_input("Crypto/Investments (₹)", min_value=0, step=500)
-savings = st.sidebar.number_input("Monthly Savings (₹)", min_value=0, step=500)
 extra_expenses = st.sidebar.number_input("Extra Expenses (₹)", min_value=0, step=500)
-emergency_fund = st.sidebar.number_input("Emergency Fund Contribution (₹)", min_value=0, step=500)
+
+# Extras Section
+st.sidebar.subheader("Extras")
+st.sidebar.text_area("Additional Notes")
 
 # Calculate Monthly & Yearly Net Savings
 expenses = rent + emi + food + fun + extra_expenses + emergency_fund
@@ -77,6 +86,17 @@ if filtered_data:
 else:
     st.write("No expenses to display.")
 
+# Net Worth Prediction Chart
+st.subheader("📈 Future Net Worth Projection")
+years_range = np.arange(1, 6)
+predicted_values = [predict_net_worth(year) for year in years_range]
+fig, ax = plt.subplots()
+ax.plot(years_range, predicted_values, marker='o', linestyle='-', color='b')
+ax.set_xlabel("Years")
+ax.set_ylabel("Predicted Net Worth (₹)")
+ax.set_title("Projected Net Worth Over Time")
+st.pyplot(fig)
+
 # Money Persona Badge
 st.subheader("🏆 Your Money Persona")
 if predicted_worth > 5000000:
@@ -101,6 +121,7 @@ if emergency_fund < (0.1 * income):
     advice.append("Increase your emergency fund contributions for financial safety.")
 
 for tip in advice:
-    st.write("✔️", tip)
+    with st.expander(f"✔️ {tip}"):
+        st.write("Suggested Action: Take steps to optimize your spending and savings!")
 
 st.caption("💬 Compare with friends & improve your financial future! 🚀")
