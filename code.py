@@ -60,7 +60,7 @@ col1, col2 = st.columns(2)
 col1.metric("Monthly Net Savings", f"₹{net_savings}")
 col2.metric("Predicted Net Worth in 5 Years", f"₹{predicted_worth:,.2f}")
 
-# Expense Breakdown Bar Graph
+# Expense Breakdown Pie Chart
 st.subheader("📌 Where Your Money Goes")
 fig, ax = plt.subplots()
 labels = ["Rent", "EMI", "Food", "Entertainment", "Extra Expenses", "Emergency Fund"]
@@ -71,9 +71,7 @@ filtered_data = [(label, value) for label, value in zip(labels, data) if value >
 if filtered_data:
     filtered_labels, filtered_values = zip(*filtered_data)
     colors = sns.color_palette("pastel", len(filtered_values))
-    ax.bar(filtered_labels, filtered_values, color=colors)
-    ax.set_ylabel("Amount (₹)")
-    ax.set_xlabel("Expense Categories")
+    ax.pie(filtered_values, labels=filtered_labels, autopct='%1.1f%%', colors=colors, startangle=140)
     ax.set_title("Expense Breakdown")
     st.pyplot(fig)
 else:
