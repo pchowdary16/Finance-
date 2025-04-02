@@ -48,7 +48,13 @@ st.subheader("📌 Where Your Money Goes")
 fig, ax = plt.subplots()
 labels = ["Rent", "EMI", "Food", "Entertainment", "Extra Expenses", "Emergency Fund"]
 data = [rent, emi, food, fun, extra_expenses, emergency_fund]
-ax.pie(data, labels=labels, autopct="%1.1f%%", startangle=140, colors=['#ff9999','#66b3ff','#99ff99','#ffcc99','#c2c2f0','#ffb3e6'])
+
+# Remove zero values
+filtered_labels, filtered_data = zip(*[(label, value) for label, value in zip(labels, data) if value > 0])
+colors = ['#ff9999','#66b3ff','#99ff99','#ffcc99','#c2c2f0','#ffb3e6'][:len(filtered_data)]
+
+if filtered_data:
+    ax.pie(filtered_data, labels=filtered_labels, autopct="%1.1f%%", startangle=140, colors=colors)
 st.pyplot(fig)
 
 # Money Persona Badge
