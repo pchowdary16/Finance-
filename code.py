@@ -10,12 +10,21 @@ st.set_page_config(page_title="💰 Rich or Bankrupt? AI Lifestyle Analyzer", la
 st.title("💰 Rich or Bankrupt? AI Lifestyle Analyzer")
 st.subheader("Predict Your Net Worth in 5 Years! 🚀")
 
-# Account Details
-st.sidebar.header("Account Details")
-name = st.sidebar.text_input("Name")
-email = st.sidebar.text_input("Email")
-username = st.sidebar.text_input("Username")
-password = st.sidebar.text_input("Password", type="password")
+# Sidebar Profile Icon to Open Account Details
+if "show_account" not in st.session_state:
+    st.session_state.show_account = False
+
+def toggle_account_details():
+    st.session_state.show_account = not st.session_state.show_account
+
+st.sidebar.button("👤 Profile", on_click=toggle_account_details)
+
+if st.session_state.show_account:
+    st.sidebar.header("Account Details")
+    name = st.sidebar.text_input("Name")
+    email = st.sidebar.text_input("Email")
+    username = st.sidebar.text_input("Username")
+    password = st.sidebar.text_input("Password", type="password")
 
 # User Inputs
 st.sidebar.header("Enter Your Financial Details")
