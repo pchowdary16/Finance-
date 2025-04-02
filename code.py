@@ -46,6 +46,7 @@ extra_expenses = st.sidebar.number_input("Extra Expenses (₹)", min_value=0, st
 # Extras Section
 st.sidebar.subheader("Extras")
 st.sidebar.text_area("Additional Notes")
+st.sidebar.file_uploader("Upload Financial Data (CSV)")
 
 # Calculate Monthly & Yearly Net Savings
 expenses = rent + emi + food + fun + extra_expenses + emergency_fund
