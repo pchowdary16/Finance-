@@ -4,6 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.linear_model import LinearRegression
+import requests
 
 # Streamlit UI
 st.title("💰 Rich or Bankrupt? AI Lifestyle Analyzer")
@@ -43,7 +44,7 @@ col1, col2 = st.columns(2)
 col1.metric("Monthly Net Savings", f"₹{net_savings}")
 col2.metric("Predicted Net Worth in 5 Years", f"₹{predicted_worth:,.2f}")
 
-# Expense Breakdown Pie Chart
+# Expense Breakdown Bar Graph
 st.subheader("📌 Where Your Money Goes")
 fig, ax = plt.subplots()
 labels = ["Rent", "EMI", "Food", "Entertainment", "Extra Expenses", "Emergency Fund"]
@@ -53,8 +54,11 @@ data = [rent, emi, food, fun, extra_expenses, emergency_fund]
 filtered_data = [(label, value) for label, value in zip(labels, data) if value > 0]
 if filtered_data:
     filtered_labels, filtered_values = zip(*filtered_data)
-    colors = ['#ff9999','#66b3ff','#99ff99','#ffcc99','#c2c2f0','#ffb3e6'][:len(filtered_values)]
-    ax.pie(filtered_values, labels=filtered_labels, autopct="%1.1f%%", startangle=140, colors=colors)
+    colors = sns.color_palette("pastel", len(filtered_values))
+    ax.bar(filtered_labels, filtered_values, color=colors)
+    ax.set_ylabel("Amount (₹)")
+    ax.set_xlabel("Expense Categories")
+    ax.set_title("Expense Breakdown")
     st.pyplot(fig)
 else:
     st.write("No expenses to display.")
@@ -84,5 +88,28 @@ if emergency_fund < (0.1 * income):
 
 for tip in advice:
     st.write("✔️", tip)
+
+# Real-time Stock Market News from Finnhub
+st.subheader("📈 Real-Time Stock Market News")
+def get_stock_news():
+    api_key = "your_actual_finnhub_api_key_here"  # Replace with your valid Finnhub API key
+    url = f"https://finnhub.io/api/v1/news?category=general&token={api_key}"
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            news_data = response.json()
+            if news_data:
+                for article in news_data[:5]:
+                    st.markdown(f"**{article['headline']}**")
+                    st.write(article.get('summary', 'No description available.'))
+                    st.write(f"[Read more]({article['url']})")
+            else:
+                st.write("No recent stock market news found.")
+        else:
+            st.error(f"Failed to fetch news. Error {response.status_code}: {response.text}")
+    except Exception as e:
+        st.error(f"Error fetching stock market news: {str(e)}")
+
+get_stock_news()
 
 st.caption("💬 Compare with friends & improve your financial future! 🚀")
