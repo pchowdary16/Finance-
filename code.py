@@ -89,7 +89,7 @@ for tip in advice:
 # Real-time Stock Market News from Finnhub
 st.subheader("📈 Real-Time Stock Market News")
 def get_stock_news():
-    api_key = "YOUR_FINNHUB_API_KEY"  # Replace with your valid Finnhub API key
+    api_key = "your_actual_finnhub_api_key_here"  # Replace with your valid Finnhub API key
     url = f"https://finnhub.io/api/v1/news?category=general&token={api_key}"
     try:
         response = requests.get(url)
