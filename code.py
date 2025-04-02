@@ -89,14 +89,22 @@ for tip in advice:
 # Real-time Stock Market News
 st.subheader("📈 Real-Time Stock Market News")
 def get_stock_news():
+    api_key = "YOUR_NEWSAPI_KEY"  # Replace with your valid NewsAPI key
+    url = f"https://newsapi.org/v2/everything?q=stocks OR market OR finance&sortBy=publishedAt&apiKey={api_key}"
     try:
-        response = requests.get("https://newsapi.org/v2/top-headlines?category=business&apiKey=YOUR_NEWSAPI_KEY")
-        news_data = response.json()
-        articles = news_data.get("articles", [])[:5]
-        for article in articles:
-            st.markdown(f"**{article['title']}**")
-            st.write(article['description'])
-            st.write(f"[Read more]({article['url']})")
+        response = requests.get(url)
+        if response.status_code == 200:
+            news_data = response.json()
+            articles = news_data.get("articles", [])[:5]
+            if articles:
+                for article in articles:
+                    st.markdown(f"**{article['title']}**")
+                    st.write(article['description'])
+                    st.write(f"[Read more]({article['url']})")
+            else:
+                st.write("No recent stock market news found.")
+        else:
+            st.error("Failed to fetch news. Check API key and rate limits.")
     except Exception as e:
         st.error("Error fetching stock market news.")
 
