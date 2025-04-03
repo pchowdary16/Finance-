@@ -62,10 +62,10 @@ else:
 
 # New Features in Sidebar
 st.sidebar.subheader("🚀 Financial Simulations")
-st.sidebar.button("If You Saved More vs. If You Spent More")
-st.sidebar.button("Adjust Spending Habits in Real-Time")
-st.sidebar.button("Compare Your Future Net Worth vs. AI Twin")
-st.sidebar.button("AI Twin’s Smartest & Dumbest Moves")
+st.sidebar.button("If You Saved More vs. If You Spent More", key="sidebar_sim1")
+st.sidebar.button("Adjust Spending Habits in Real-Time", key="sidebar_sim2")
+st.sidebar.button("Compare Your Future Net Worth vs. AI Twin", key="sidebar_sim3")
+st.sidebar.button("AI Twin’s Smartest & Dumbest Moves", key="sidebar_sim4")
 
 # Calculate Financial Metrics
 expenses = rent + emi + food + fun + extra_expenses + emergency_fund + custom_expense_value + additional_cost
@@ -84,10 +84,10 @@ col3.metric("Savings Rate", f"{savings_rate:.2f}%")
 
 # Financial Simulations in Main Dashboard
 st.subheader("🔮 Financial Simulations")
-st.button("If You Saved More vs. If You Spent More")
-st.button("Adjust Spending Habits in Real-Time")
-st.button("Compare Your Future Net Worth vs. AI Twin")
-st.button("AI Twin’s Smartest & Dumbest Moves")
+st.button("If You Saved More vs. If You Spent More", key="main_sim1")
+st.button("Adjust Spending Habits in Real-Time", key="main_sim2")
+st.button("Compare Your Future Net Worth vs. AI Twin", key="main_sim3")
+st.button("AI Twin’s Smartest & Dumbest Moves", key="main_sim4")
 
 # AI Advisor Suggestions
 st.subheader("🤖 AI Money Advisor")
