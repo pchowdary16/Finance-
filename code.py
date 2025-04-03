@@ -60,13 +60,6 @@ if life_event != "None":
 else:
     additional_cost = 0
 
-# New Features in Sidebar
-st.sidebar.subheader("🚀 Financial Simulations")
-st.sidebar.button("If You Saved More vs. If You Spent More", key="sidebar_sim1")
-st.sidebar.button("Adjust Spending Habits in Real-Time", key="sidebar_sim2")
-st.sidebar.button("Compare Your Future Net Worth vs. AI Twin", key="sidebar_sim3")
-st.sidebar.button("AI Twin’s Smartest & Dumbest Moves", key="sidebar_sim4")
-
 # Calculate Financial Metrics
 expenses = rent + emi + food + fun + extra_expenses + emergency_fund + custom_expense_value + additional_cost
 net_savings = income - expenses
