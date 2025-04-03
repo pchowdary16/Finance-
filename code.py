@@ -26,15 +26,6 @@ if st.session_state.show_account:
         username = st.text_input("Username")
         password = st.text_input("Password", type="password")
 
-# Securely Store Credentials
-if "secrets" in st.secrets:
-    stored_username = st.secrets["username"]
-    stored_password = st.secrets["password"]
-    if username == stored_username and password == stored_password:
-        st.sidebar.success("✅ Logged in successfully!")
-    else:
-        st.sidebar.error("❌ Incorrect credentials")
-
 # Currency Selection
 currency = st.sidebar.selectbox("Currency", ["₹ (INR)", "$ (USD)", "€ (EUR)", "£ (GBP)"])
 currency_symbol = currency.split()[0]
@@ -76,20 +67,37 @@ col1.metric("Monthly Net Savings", f"{currency_symbol}{net_savings}")
 col2.metric("Debt-to-Income Ratio", f"{debt_to_income_ratio:.2f}%")
 col3.metric("Savings Rate", f"{savings_rate:.2f}%")
 
-# Predict Future Net Worth with Inflation
+# Life Event Planner
+st.subheader("🔮 Life Event Planner")
+life_event = st.selectbox("Plan for a major life event:", ["None", "Marriage", "Kids", "Home Purchase"])
+if life_event != "None":
+    additional_cost = st.number_input(f"Estimated Additional Cost for {life_event} ({currency_symbol})", min_value=0, step=1000)
+    net_savings -= additional_cost
+
+# AI Advisor Suggestions
+st.subheader("🤖 AI Money Advisor")
+advice = []
+if net_savings < 0:
+    advice.append("You're spending more than you earn! Consider reducing discretionary expenses.")
+if savings_rate < 20:
+    advice.append("Try to save at least 20% of your income for financial stability.")
+if debt_to_income_ratio > 40:
+    advice.append("High debt burden! Consider paying off loans faster or refinancing.")
+if len(advice) > 0:
+    for tip in advice:
+        st.warning(tip)
+else:
+    st.success("Your financial health looks great! Keep it up!")
+
+# Predict Future Net Worth
+st.subheader("📈 Net Worth Growth Over Time")
 def predict_net_worth(years=5, growth_rate=growth_rate, inflation_rate=inflation_rate):
     real_growth = growth_rate - inflation_rate
-    years_array = np.array(range(1, years + 1)).reshape(-1, 1)
-    savings_array = np.array([net_worth_now * (1 + real_growth) ** i for i in range(1, years + 1)]).reshape(-1, 1)
-    model = LinearRegression()
-    model.fit(years_array, savings_array)
-    future_net_worth = model.predict(np.array([[years]])).flatten()[0]
-    return future_net_worth
+    worth_over_time = [net_worth_now * (1 + real_growth) ** i for i in range(6)]
+    return worth_over_time
 
-predicted_worth = predict_net_worth()
-st.subheader("📈 Net Worth Growth Over Time")
+worth_over_time = predict_net_worth()
 years = np.array(range(1, 6))
-worth_over_time = [net_worth_now * (1 + (growth_rate - inflation_rate)) ** i for i in range(6)]
 fig, ax = plt.subplots(figsize=(8, 4))
 ax.plot(np.array([0] + list(years)), [net_worth_now] + worth_over_time, marker='o', color='green')
 ax.set_xlabel("Years")
