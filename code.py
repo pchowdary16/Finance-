@@ -4,6 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.linear_model import LinearRegression
+import openai
 
 # Set Streamlit Page Config (Must be the first command)
 st.set_page_config(page_title="💰 Rich or Bankrupt? AI Lifestyle Analyzer", layout="wide")
@@ -17,6 +18,31 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.title("💰 Rich or Bankrupt? AI Lifestyle Analyzer")
+
+# AI Chatbot Section
+st.subheader("💬 AI Financial Chatbot")
+if "chat_history" not in st.session_state:
+    st.session_state.chat_history = []
+
+for message in st.session_state.chat_history:
+    with st.chat_message(message["role"]):
+        st.write(message["content"])
+
+user_input = st.chat_input("Ask me about your finances!")
+if user_input:
+    st.session_state.chat_history.append({"role": "user", "content": user_input})
+    
+    # Call OpenAI API (Replace "your-api-key" with your actual API key)
+    openai.api_key = "AIzaSyDLl-AIfzMzBBvOa8jiRz_EE5q4C-m1K0o"
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[{"role": msg["role"], "content": msg["content"]} for msg in st.session_state.chat_history]
+    )
+    ai_response = response["choices"][0]["message"]["content"]
+    
+    st.session_state.chat_history.append({"role": "assistant", "content": ai_response})
+    with st.chat_message("assistant"):
+        st.write(ai_response)
 
 # Sidebar Profile Section
 if "show_account" not in st.session_state:
