@@ -9,7 +9,7 @@ from sklearn.linear_model import LinearRegression
 st.set_page_config(page_title="💰 Rich or Bankrupt? AI Lifestyle Analyzer", layout="wide")
 
 # Update Chatbot Section
-t.st.sidebar.subheader("💬 AI Financial Chatbot")
+st.sidebar.subheader("💬 AI Financial Chatbot")
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
