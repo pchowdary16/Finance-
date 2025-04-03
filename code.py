@@ -8,29 +8,6 @@ from sklearn.linear_model import LinearRegression
 # Set Streamlit Page Config (Must be the first command)
 st.set_page_config(page_title="💰 Rich or Bankrupt? AI Lifestyle Analyzer", layout="wide")
 
-# Update Chatbot Section
-st.sidebar.subheader("💬 AI Financial Chatbot")
-if "chat_history" not in st.session_state:
-    st.session_state.chat_history = []
-
-for message in st.session_state.chat_history:
-    st.sidebar.chat_message(message["role"]).write(message["content"])
-
-user_input = st.sidebar.chat_input("Ask me about your finances!")
-if user_input:
-    st.session_state.chat_history.append({"role": "user", "content": user_input})
-    response = "AI response feature disabled"  # No API call now
-    st.session_state.chat_history.append({"role": "assistant", "content": response})
-    st.sidebar.chat_message("assistant").write(response)
-
-st.markdown("""
-    <style>
-        body {
-            background-color: white !important;
-        }
-    </style>
-""", unsafe_allow_html=True)
-
 st.title("💰 Rich or Bankrupt? AI Lifestyle Analyzer")
 
 # Sidebar Profile Section
@@ -121,3 +98,18 @@ ax.grid(True)
 st.pyplot(fig)
 
 st.caption("💬 Compare with friends & improve your financial future! 🚀")
+
+# Update Chatbot Section
+st.sidebar.subheader("💬 AI Financial Chatbot")
+if "chat_history" not in st.session_state:
+    st.session_state.chat_history = []
+
+for message in st.session_state.chat_history:
+    st.sidebar.chat_message(message["role"]).write(message["content"])
+
+user_input = st.sidebar.chat_input("Ask me about your finances!")
+if user_input:
+    st.session_state.chat_history.append({"role": "user", "content": user_input})
+    response = "AI response feature disabled"  # No API call now
+    st.session_state.chat_history.append({"role": "assistant", "content": response})
+    st.sidebar.chat_message("assistant").write(response)
