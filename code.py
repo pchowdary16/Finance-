@@ -4,7 +4,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.linear_model import LinearRegression
-import openai
 
 # Set Streamlit Page Config (Must be the first command)
 st.set_page_config(page_title="💰 Rich or Bankrupt? AI Lifestyle Analyzer", layout="wide")
@@ -18,31 +17,6 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.title("💰 Rich or Bankrupt? AI Lifestyle Analyzer")
-
-# AI Chatbot Section
-st.subheader("💬 AI Financial Chatbot")
-if "chat_history" not in st.session_state:
-    st.session_state.chat_history = []
-
-for message in st.session_state.chat_history:
-    with st.chat_message(message["role"]):
-        st.write(message["content"])
-
-user_input = st.chat_input("Ask me about your finances!")
-if user_input:
-    st.session_state.chat_history.append({"role": "user", "content": user_input})
-    
-    # Call OpenAI API (Replace "your-api-key" with your actual API key)
-    client = openai.OpenAI(api_key="AIzaSyDLl-AIfzMzBBvOa8jiRz_EE5q4C-m1K0o")
-    response = client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages=[{"role": msg["role"], "content": msg["content"]} for msg in st.session_state.chat_history]
-    )
-    ai_response = response.choices[0].message.content
-    
-    st.session_state.chat_history.append({"role": "assistant", "content": ai_response})
-    with st.chat_message("assistant"):
-        st.write(ai_response)
 
 # Sidebar Profile Section
 if "show_account" not in st.session_state:
@@ -117,18 +91,31 @@ st.metric("Projected Savings in 5 Years", f"{currency_symbol}{future_savings}")
 
 # Predict Future Net Worth
 st.subheader("📈 Net Worth Growth Over Time")
-def predict_net_worth(years=5, growth_rate=growth_rate, inflation_rate=inflation_rate):
+def predict_net_worth(years=10, growth_rate=growth_rate, inflation_rate=inflation_rate):
     real_growth = growth_rate - inflation_rate
-    return [net_worth_now * (1 + real_growth) ** i for i in range(6)]
+    return [net_worth_now * (1 + real_growth) ** i for i in range(years + 1)]
 
 worth_over_time = predict_net_worth()
-years = np.arange(6)
+years = np.arange(11)
 fig, ax = plt.subplots(figsize=(8, 4))
-ax.plot(years, worth_over_time, marker='o', color='green')
+ax.plot(years, worth_over_time, marker='o', color='green', label="Your Net Worth")
 ax.set_xlabel("Years")
 ax.set_ylabel(f"Net Worth ({currency_symbol})")
 ax.set_title("Projected Net Worth Growth")
 ax.grid(True)
+ax.legend()
 st.pyplot(fig)
 
-st.caption("💬 Compare with friends & improve your financial future! 🚀")
+# AI Twin Comparison
+st.subheader("✅ Compare Your Future Net Worth vs. AI Twin’s Net Worth – Who’s richer in 10 years?")
+
+def predict_ai_twin_net_worth():
+    ai_growth_rate = growth_rate + 0.02  # AI Twin has a slightly better investment strategy
+    return [net_worth_now * (1 + ai_growth_rate) ** i for i in range(11)]
+
+ai_worth_over_time = predict_ai_twin_net_worth()
+ax.plot(years, ai_worth_over_time, marker='o', color='blue', linestyle='dashed', label="AI Twin's Net Worth")
+ax.legend()
+st.pyplot(fig)
+
+st.caption("💬 Compare with AI Twin & improve your financial future! 🚀")
