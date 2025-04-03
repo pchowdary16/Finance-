@@ -60,6 +60,21 @@ if life_event != "None":
 else:
     additional_cost = 0
 
+# Chatbot Section
+st.sidebar.subheader("💬 AI Financial Chatbot")
+if "chat_history" not in st.session_state:
+    st.session_state.chat_history = []
+
+for message in st.session_state.chat_history:
+    st.sidebar.chat_message(message["role"]).write(message["content"])
+
+user_input = st.sidebar.chat_input("Ask me about your finances!")
+if user_input:
+    st.session_state.chat_history.append({"role": "user", "content": user_input})
+    response = f"🤖 AI: That's an interesting question! Let me analyze it... (Dummy response)"
+    st.session_state.chat_history.append({"role": "assistant", "content": response})
+    st.sidebar.chat_message("assistant").write(response)
+
 # Calculate Financial Metrics
 expenses = rent + emi + food + fun + extra_expenses + emergency_fund + custom_expense_value + additional_cost
 net_savings = income - expenses
