@@ -10,7 +10,7 @@ import google.generativeai as genai
 st.set_page_config(page_title="💰 Rich or Bankrupt? AI Lifestyle Analyzer", layout="wide")
 
 # Set your API key
-genai.configure(api_key="AIzaSyDLl-AIfzMzBBvOa8jiRz_EE5q4C-m1K0o")
+genai.configure(api_key= "AIzaSyAbdF2G5ekSthObnYfAfmGE72E8qUm4RD0")
 
 # Function to get chatbot response from Gemini
 def get_gemini_response(prompt):
