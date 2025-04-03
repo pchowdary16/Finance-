@@ -100,10 +100,14 @@ col3.metric("Savings Rate", f"{savings_rate:.2f}%")
 
 # Financial Simulations in Main Dashboard
 st.subheader("🔮 Financial Simulations")
-st.button("If You Saved More vs. If You Spent More", key="main_sim1")
-st.button("Adjust Spending Habits in Real-Time", key="main_sim2")
-st.button("Compare Your Future Net Worth vs. AI Twin", key="main_sim3")
-st.button("AI Twin’s Smartest & Dumbest Moves", key="main_sim4")
+if st.button("If You Saved More vs. If You Spent More", key="main_sim1"):
+    st.write("Showing alternate financial futures based on different saving and spending habits.")
+if st.button("Adjust Spending Habits in Real-Time", key="main_sim2"):
+    st.write("Live simulation of how adjusting spending affects your future wealth.")
+if st.button("Compare Your Future Net Worth vs. AI Twin", key="main_sim3"):
+    st.write("Simulating future net worth comparison with an AI twin.")
+if st.button("AI Twin’s Smartest & Dumbest Moves", key="main_sim4"):
+    st.write("Displaying the best and worst financial decisions made by your AI twin.")
 
 # AI Advisor Suggestions
 st.subheader("🤖 AI Money Advisor")
