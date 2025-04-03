@@ -6,6 +6,9 @@ import seaborn as sns
 from sklearn.linear_model import LinearRegression
 import google.generativeai as genai
 
+# Set Streamlit Page Config (Must be the first command)
+st.set_page_config(page_title="💰 Rich or Bankrupt? AI Lifestyle Analyzer", layout="wide")
+
 # Set your API key
 genai.configure(api_key="AIzaSyDLl-AIfzMzBBvOa8jiRz_EE5q4C-m1K0o")
 
@@ -30,8 +33,6 @@ if user_input:
     st.session_state.chat_history.append({"role": "assistant", "content": response})
     st.sidebar.chat_message("assistant").write(response)
 
-# Set Streamlit Page Config
-st.set_page_config(page_title="💰 Rich or Bankrupt? AI Lifestyle Analyzer", layout="wide")
 st.markdown("""
     <style>
         body {
