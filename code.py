@@ -57,7 +57,6 @@ if "show_account" not in st.session_state:
 def toggle_account_details():
     st.session_state.show_account = not st.session_state.show_account
 
-st.sidebar.image("https://via.placeholder.com/100", width=100)
 st.sidebar.button("👤 Profile", on_click=toggle_account_details)
 
 if st.session_state.show_account:
