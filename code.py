@@ -33,11 +33,13 @@ if user_input:
     st.session_state.chat_history.append({"role": "user", "content": user_input})
     
     # Call OpenAI API (Replace "your-api-key" with your actual API key)
-    openai.api_key = "AIzaSyDLl-AIfzMzBBvOa8jiRz_EE5q4C-m1K0o"
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[{"role": msg["role"], "content": msg["content"]} for msg in st.session_state.chat_history]
-    )
+    client = openai.OpenAI(api_key="AIzaSyDLl-AIfzMzBBvOa8jiRz_EE5q4C-m1K0o")
+response = client.chat.completions.create(
+    model="gpt-3.5-turbo",
+    messages=[{"role": msg["role"], "content": msg["content"]} for msg in st.session_state.chat_history]
+)
+ai_response = response.choices[0].message.content
+
     ai_response = response["choices"][0]["message"]["content"]
     
     st.session_state.chat_history.append({"role": "assistant", "content": ai_response})
