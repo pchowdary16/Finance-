@@ -39,8 +39,6 @@ response = client.chat.completions.create(
     messages=[{"role": msg["role"], "content": msg["content"]} for msg in st.session_state.chat_history]
 )
 ai_response = response.choices[0].message.content
-
-    ai_response = response["choices"][0]["message"]["content"]
     
     st.session_state.chat_history.append({"role": "assistant", "content": ai_response})
     with st.chat_message("assistant"):
