@@ -99,6 +99,9 @@ expenses = rent + emi + food + fun + extra_expenses + emergency_fund + custom_ex
 net_savings = income - expenses
 net_worth_now = savings * 12
 
+debt_to_income_ratio = (emi / income * 100) if income > 0 else 0
+savings_rate = (savings / income * 100) if income > 0 else 0
+
 # Display Financial Metrics
 st.subheader("📊 Financial Summary")
 col1, col2, col3 = st.columns(3)
