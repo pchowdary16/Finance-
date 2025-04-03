@@ -106,16 +106,62 @@ ax.grid(True)
 ax.legend()
 st.pyplot(fig)
 
-# AI Twin Comparison
-st.subheader("✅ Compare Your Future Net Worth vs. AI Twin’s Net Worth – Who’s richer in 10 years?")
+# Set Streamlit Page Config
+st.set_page_config(page_title="💰 AI Twin Wealth Analyzer", layout="wide")
 
-def predict_ai_twin_net_worth():
-    ai_growth_rate = growth_rate + 0.02  # AI Twin has a slightly better investment strategy
-    return [net_worth_now * (1 + ai_growth_rate) ** i for i in range(11)]
+st.title("✅ Compare Your Future Net Worth vs. AI Twin’s Net Worth – Who’s Richer in 10 Years?")
 
-ai_worth_over_time = predict_ai_twin_net_worth()
-ax.plot(years, ai_worth_over_time, marker='o', color='blue', linestyle='dashed', label="AI Twin's Net Worth")
+# User Inputs
+income = st.number_input("Monthly Income ($)", min_value=1000, step=500, value=10000)
+rent = st.number_input("Rent ($)", min_value=0, step=100, value=1000)
+investments = st.number_input("Investments ($)", min_value=0, step=500, value=3000)
+entertainment = st.number_input("Entertainment ($)", min_value=0, step=500, value=2000)
+fun = st.number_input("Fun & Leisure ($)", min_value=0, step=500, value=2000)
+food = st.number_input("Food & Groceries ($)", min_value=0, step=500, value=2000)
+
+# User Expense Breakdown
+expenses = rent + investments + entertainment + fun + food
+savings = income - expenses
+
+# AI Twin Optimization
+ai_investments = investments + (entertainment * 0.5) + (fun * 0.5)  # AI reallocates 50% from fun & entertainment to investments
+ai_entertainment = entertainment * 0.5  # AI reduces entertainment spending
+ai_fun = fun * 0.5  # AI reduces fun spending
+ai_expenses = rent + ai_investments + ai_entertainment + ai_fun + food
+ai_savings = income - ai_expenses
+
+# Growth Simulation
+def calculate_net_worth(starting_savings, monthly_savings, growth_rate, years=10):
+    net_worth = [starting_savings]
+    for i in range(1, years + 1):
+        net_worth.append(net_worth[-1] * (1 + growth_rate) + monthly_savings * 12)
+    return net_worth
+
+# Growth Rates
+user_growth_rate = 0.07  # 7% annual return
+ai_growth_rate = 0.10  # 10% annual return due to better investment allocation
+
+# Net Worth Calculation
+years = np.arange(11)
+user_net_worth = calculate_net_worth(0, savings, user_growth_rate)
+ai_net_worth = calculate_net_worth(0, ai_savings, ai_growth_rate)
+
+# Plotting
+fig, ax = plt.subplots(figsize=(8, 4))
+ax.plot(years, user_net_worth, marker='o', color='green', label="Your Net Worth")
+ax.plot(years, ai_net_worth, marker='o', color='blue', linestyle='dashed', label="AI Twin's Net Worth")
+ax.set_xlabel("Years")
+ax.set_ylabel("Net Worth ($)")
+ax.set_title("Projected Net Worth Growth: You vs. AI Twin")
 ax.legend()
+ax.grid(True)
+
 st.pyplot(fig)
 
-st.caption("💬 Compare with AI Twin & improve your financial future! 🚀")
+# Display Comparison Metrics
+st.subheader("📊 Financial Comparison")
+col1, col2 = st.columns(2)
+col1.metric("Your 10-Year Net Worth", f"${user_net_worth[-1]:,.2f}")
+col2.metric("AI Twin's 10-Year Net Worth", f"${ai_net_worth[-1]:,.2f}")
+
+st.caption("💡 AI Twin optimizes your spending for a better financial future! 🚀")
