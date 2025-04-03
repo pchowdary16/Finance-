@@ -7,6 +7,14 @@ from sklearn.linear_model import LinearRegression
 
 # Set Streamlit Page Config
 st.set_page_config(page_title="💰 Rich or Bankrupt? AI Lifestyle Analyzer", layout="wide")
+st.markdown("""
+    <style>
+        body {
+            background-color: white !important;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
 st.title("💰 Rich or Bankrupt? AI Lifestyle Analyzer")
 
 # Sidebar Profile Section
