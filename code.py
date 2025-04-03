@@ -82,6 +82,13 @@ col1.metric("Monthly Net Savings", f"{currency_symbol}{net_savings}")
 col2.metric("Debt-to-Income Ratio", f"{debt_to_income_ratio:.2f}%")
 col3.metric("Savings Rate", f"{savings_rate:.2f}%")
 
+# Financial Simulations in Main Dashboard
+st.subheader("🔮 Financial Simulations")
+st.button("If You Saved More vs. If You Spent More")
+st.button("Adjust Spending Habits in Real-Time")
+st.button("Compare Your Future Net Worth vs. AI Twin")
+st.button("AI Twin’s Smartest & Dumbest Moves")
+
 # AI Advisor Suggestions
 st.subheader("🤖 AI Money Advisor")
 advice = []
