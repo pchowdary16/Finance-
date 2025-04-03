@@ -4,6 +4,31 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.linear_model import LinearRegression
+import google.generativeai as genai
+
+# Set your API key
+genai.configure(api_key="AIzaSyDLl-AIfzMzBBvOa8jiRz_EE5q4C-m1K0o")
+
+# Function to get chatbot response from Gemini
+def get_gemini_response(prompt):
+    model = genai.GenerativeModel("gemini-pro")
+    response = model.generate_content(prompt)
+    return response.text
+
+# Update Chatbot Section to Use Gemini API
+st.sidebar.subheader("💬 AI Financial Chatbot")
+if "chat_history" not in st.session_state:
+    st.session_state.chat_history = []
+
+for message in st.session_state.chat_history:
+    st.sidebar.chat_message(message["role"]).write(message["content"])
+
+user_input = st.sidebar.chat_input("Ask me about your finances!")
+if user_input:
+    st.session_state.chat_history.append({"role": "user", "content": user_input})
+    response = get_gemini_response(user_input)  # Fetch response from Gemini
+    st.session_state.chat_history.append({"role": "assistant", "content": response})
+    st.sidebar.chat_message("assistant").write(response)
 
 # Set Streamlit Page Config
 st.set_page_config(page_title="💰 Rich or Bankrupt? AI Lifestyle Analyzer", layout="wide")
