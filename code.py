@@ -27,7 +27,7 @@ if st.session_state.show_account:
         password = st.text_input("Password", type="password")
 
 # Currency Selection
-currency = st.sidebar.selectbox("Currency", ["₹ (INR)", "$ (USD)", "€ (EUR)", "£ (GBP)"])
+currency = st.sidebar.selectbox("Currency", ["\u20b9 (INR)", "$ (USD)", "€ (EUR)", "£ (GBP)"])
 currency_symbol = currency.split()[0]
 
 # Financial Inputs
@@ -68,7 +68,7 @@ col2.metric("Debt-to-Income Ratio", f"{debt_to_income_ratio:.2f}%")
 col3.metric("Savings Rate", f"{savings_rate:.2f}%")
 
 # Life Event Planner
-st.subheader("🔮 Life Event Planner")
+st.subheader("💎 Life Event Planner")
 life_event = st.selectbox("Plan for a major life event:", ["None", "Marriage", "Kids", "Home Purchase"])
 if life_event != "None":
     additional_cost = st.number_input(f"Estimated Additional Cost for {life_event} ({currency_symbol})", min_value=0, step=1000)
@@ -93,13 +93,12 @@ else:
 st.subheader("📈 Net Worth Growth Over Time")
 def predict_net_worth(years=5, growth_rate=growth_rate, inflation_rate=inflation_rate):
     real_growth = growth_rate - inflation_rate
-    worth_over_time = [net_worth_now * (1 + real_growth) ** i for i in range(6)]
-    return worth_over_time
+    return [net_worth_now * (1 + real_growth) ** i for i in range(6)]
 
 worth_over_time = predict_net_worth()
-years = np.array(range(1, 6))
+years = np.arange(6)
 fig, ax = plt.subplots(figsize=(8, 4))
-ax.plot(np.array([0] + list(years)), [net_worth_now] + worth_over_time, marker='o', color='green')
+ax.plot(years, worth_over_time, marker='o', color='green')
 ax.set_xlabel("Years")
 ax.set_ylabel(f"Net Worth ({currency_symbol})")
 ax.set_title("Projected Net Worth Growth")
