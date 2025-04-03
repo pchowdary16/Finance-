@@ -13,7 +13,7 @@ genai.configure(api_key="AIzaSyDLl-AIfzMzBBvOa8jiRz_EE5q4C-m1K0o")
 def get_gemini_response(prompt):
     model = genai.GenerativeModel("gemini-pro")
     response = model.generate_content(prompt)
-    return response.text
+    return response.text if hasattr(response, 'text') else "I'm having trouble responding right now. Please try again later."
 
 # Update Chatbot Section to Use Gemini API
 st.sidebar.subheader("💬 AI Financial Chatbot")
@@ -93,28 +93,10 @@ if life_event != "None":
 else:
     additional_cost = 0
 
-# Chatbot Section
-st.sidebar.subheader("💬 AI Financial Chatbot")
-if "chat_history" not in st.session_state:
-    st.session_state.chat_history = []
-
-for message in st.session_state.chat_history:
-    st.sidebar.chat_message(message["role"]).write(message["content"])
-
-user_input = st.sidebar.chat_input("Ask me about your finances!")
-if user_input:
-    st.session_state.chat_history.append({"role": "user", "content": user_input})
-    response = f"🤖 AI: That's an interesting question! Let me analyze it... (Dummy response)"
-    st.session_state.chat_history.append({"role": "assistant", "content": response})
-    st.sidebar.chat_message("assistant").write(response)
-
 # Calculate Financial Metrics
 expenses = rent + emi + food + fun + extra_expenses + emergency_fund + custom_expense_value + additional_cost
 net_savings = income - expenses
 net_worth_now = savings * 12
-
-debt_to_income_ratio = (emi / income) * 100 if income > 0 else 0
-savings_rate = (savings / income) * 100 if income > 0 else 0
 
 # Display Financial Metrics
 st.subheader("📊 Financial Summary")
@@ -123,31 +105,10 @@ col1.metric("Monthly Net Savings", f"{currency_symbol}{net_savings}")
 col2.metric("Debt-to-Income Ratio", f"{debt_to_income_ratio:.2f}%")
 col3.metric("Savings Rate", f"{savings_rate:.2f}%")
 
-# Financial Simulations in Main Dashboard
-st.subheader("🔮 Financial Simulations")
-if st.button("If You Saved More vs. If You Spent More", key="main_sim1"):
-    st.write("Showing alternate financial futures based on different saving and spending habits.")
-if st.button("Adjust Spending Habits in Real-Time", key="main_sim2"):
-    st.write("Live simulation of how adjusting spending affects your future wealth.")
-if st.button("Compare Your Future Net Worth vs. AI Twin", key="main_sim3"):
-    st.write("Simulating future net worth comparison with an AI twin.")
-if st.button("AI Twin’s Smartest & Dumbest Moves", key="main_sim4"):
-    st.write("Displaying the best and worst financial decisions made by your AI twin.")
-
-# AI Advisor Suggestions
-st.subheader("🤖 AI Money Advisor")
-advice = []
-if net_savings < 0:
-    advice.append("You're spending more than you earn! Consider reducing discretionary expenses.")
-if savings_rate < 20:
-    advice.append("Try to save at least 20% of your income for financial stability.")
-if debt_to_income_ratio > 40:
-    advice.append("High debt burden! Consider paying off loans faster or refinancing.")
-if len(advice) > 0:
-    for tip in advice:
-        st.warning(tip)
-else:
-    st.success("Your financial health looks great! Keep it up!")
+# Predict Future Savings
+st.subheader("💰 How Much Can You Save in 5 Years?")
+future_savings = savings * 12 * 5
+st.metric("Projected Savings in 5 Years", f"{currency_symbol}{future_savings}")
 
 # Predict Future Net Worth
 st.subheader("📈 Net Worth Growth Over Time")
