@@ -5,9 +5,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.linear_model import LinearRegression
 
-[api_keys]
-google = "AIzaSyDLl-AIfzMzBBvOa8jiRz_EE5q4C-m1K0o"
-
 # Set Streamlit Page Config
 st.set_page_config(page_title="💰 Rich or Bankrupt? AI Lifestyle Analyzer", layout="wide")
 st.title("💰 Rich or Bankrupt? AI Lifestyle Analyzer")
