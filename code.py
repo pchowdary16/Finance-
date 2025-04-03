@@ -27,7 +27,7 @@ if st.session_state.show_account:
         password = st.text_input("Password", type="password")
 
 # Currency Selection
-currency = st.sidebar.selectbox("Currency", ["\u20b9 (INR)", "$ (USD)", "€ (EUR)", "£ (GBP)"])
+currency = st.sidebar.selectbox("Currency", ["₹ (INR)", "$ (USD)", "€ (EUR)", "£ (GBP)"])
 currency_symbol = currency.split()[0]
 
 # Financial Inputs
@@ -52,8 +52,16 @@ with st.sidebar.expander("🍔 Flexible Expenses", expanded=False):
     custom_expense = st.text_input("Custom Expense Name")
     custom_expense_value = st.number_input(f"Custom Expense ({currency_symbol})", min_value=0, step=500)
 
+# Major Life Event Planner
+st.sidebar.subheader("💎 Life Event Planner")
+life_event = st.sidebar.selectbox("Plan for a major life event:", ["None", "Marriage", "Kids", "Home Purchase"])
+if life_event != "None":
+    additional_cost = st.sidebar.number_input(f"Estimated Additional Cost for {life_event} ({currency_symbol})", min_value=0, step=1000)
+else:
+    additional_cost = 0
+
 # Calculate Financial Metrics
-expenses = rent + emi + food + fun + extra_expenses + emergency_fund + custom_expense_value
+expenses = rent + emi + food + fun + extra_expenses + emergency_fund + custom_expense_value + additional_cost
 net_savings = income - expenses
 net_worth_now = savings * 12
 
@@ -66,13 +74,6 @@ col1, col2, col3 = st.columns(3)
 col1.metric("Monthly Net Savings", f"{currency_symbol}{net_savings}")
 col2.metric("Debt-to-Income Ratio", f"{debt_to_income_ratio:.2f}%")
 col3.metric("Savings Rate", f"{savings_rate:.2f}%")
-
-# Life Event Planner
-st.subheader("💎 Life Event Planner")
-life_event = st.selectbox("Plan for a major life event:", ["None", "Marriage", "Kids", "Home Purchase"])
-if life_event != "None":
-    additional_cost = st.number_input(f"Estimated Additional Cost for {life_event} ({currency_symbol})", min_value=0, step=1000)
-    net_savings -= additional_cost
 
 # AI Advisor Suggestions
 st.subheader("🤖 AI Money Advisor")
