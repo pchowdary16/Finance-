@@ -4,22 +4,12 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.linear_model import LinearRegression
-import google.generativeai as genai
 
 # Set Streamlit Page Config (Must be the first command)
 st.set_page_config(page_title="💰 Rich or Bankrupt? AI Lifestyle Analyzer", layout="wide")
 
-# Set your API key
-genai.configure(api_key= "AIzaSyAbdF2G5ekSthObnYfAfmGE72E8qUm4RD0")
-
-# Function to get chatbot response from Gemini
-def get_gemini_response(prompt):
-    model = genai.GenerativeModel("gemini-pro")
-    response = model.generate_content(prompt)
-    return response.text if hasattr(response, 'text') else "I'm having trouble responding right now. Please try again later."
-
-# Update Chatbot Section to Use Gemini API
-st.sidebar.subheader("💬 AI Financial Chatbot")
+# Update Chatbot Section
+t.st.sidebar.subheader("💬 AI Financial Chatbot")
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
@@ -29,7 +19,7 @@ for message in st.session_state.chat_history:
 user_input = st.sidebar.chat_input("Ask me about your finances!")
 if user_input:
     st.session_state.chat_history.append({"role": "user", "content": user_input})
-    response = get_gemini_response(user_input)  # Fetch response from Gemini
+    response = "AI response feature disabled"  # No API call now
     st.session_state.chat_history.append({"role": "assistant", "content": response})
     st.sidebar.chat_message("assistant").write(response)
 
